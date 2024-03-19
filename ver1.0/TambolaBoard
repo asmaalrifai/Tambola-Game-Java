@@ -1,0 +1,48 @@
+public class TambolaBoard {
+        Node[] columns; // Changed from 'rows' to 'columns'
+
+    public TambolaBoard() {
+        columns = new Node[9]; // 9 columns
+        for (int i = 0; i < 9; i++) {
+            columns[i] = generateColumn(i * 10 + 1, (i + 1) * 10); // i represents the column number
+        }
+    }
+
+    // Generate a column of numbers in linked list
+    private Node generateColumn(int start, int end) {
+        Node dummy = new Node(-1); // Dummy node to simplify insertion
+        Node current = dummy;
+        
+        Random rand = new Random();
+        boolean[] selected = new boolean[end - start + 1]; // Track selected numbers
+        
+        // Insert 3 unique random numbers into the linked list
+        for (int i = 0; i < 3; i++) {
+            int num;
+            do {
+                num = rand.nextInt(end - start + 1) + start;
+            } while (selected[num - start]); // Ensure uniqueness
+            selected[num - start] = true;
+            
+            current.next = new Node(num);
+            current = current.next;
+        }
+        
+        return dummy.next;
+    }
+
+    // Display the Tambola board
+    public void displayBoard() {
+        for (int i = 0; i < 3; i++) { // We iterate 3 times for each row
+            for (int j = 0; j < 9; j++) {
+                Node current = columns[j];
+                // Move to the i-th node in the current column
+                for (int k = 0; k < i; k++) {
+                    current = current.next;
+                }
+                System.out.print(current.data + "\t");
+            }
+            System.out.println();
+        }
+    }
+}
