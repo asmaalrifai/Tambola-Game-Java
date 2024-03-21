@@ -1,0 +1,113 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class MyWindow {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Player Names");
+        frame.setSize(400, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+        placeComponents(panel, frame);
+
+        frame.setVisible(true);
+    }
+
+    private static void placeComponents(JPanel panel, JFrame frame) {
+        panel.setLayout(null);
+
+        JLabel player1Label = new JLabel("Player 1 Name:");
+        player1Label.setBounds(50, 30, 100, 25);
+        panel.add(player1Label);
+
+        JTextField player1Text = new JTextField(20);
+        player1Text.setBounds(150, 30, 165, 25);
+        panel.add(player1Text);
+
+        JLabel player2Label = new JLabel("Player 2 Name:");
+        player2Label.setBounds(50, 70, 100, 25);
+        panel.add(player2Label);
+
+        JTextField player2Text = new JTextField(20);
+        player2Text.setBounds(150, 70, 165, 25);
+        panel.add(player2Text);
+
+        JButton playButton = new JButton("PLAY");
+        playButton.setBounds(150, 110, 80, 25);
+        panel.add(playButton);
+
+        playButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String player1Name = player1Text.getText();
+                String player2Name = player2Text.getText();
+
+                frame.dispose(); // Close the player names window
+
+                TambolaGame player1Game = new TambolaGame();
+                TambolaGame player2Game = new TambolaGame();
+
+                JFrame gameFrame = new JFrame("Tambola Game");
+                gameFrame.setSize(800, 400);
+                gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                JPanel gamePanel = new JPanel(new GridLayout(1, 3));
+                gameFrame.add(gamePanel);
+
+                JPanel player1Panel = new JPanel(new BorderLayout());
+                gamePanel.add(player1Panel);
+                displayPlayerPanel(player1Panel, player1Name, player1Game);
+
+                JPanel drawPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+                gamePanel.add(drawPanel);
+                displayDrawPanel(drawPanel, player1Game, player2Game);
+
+                JPanel player2Panel = new JPanel(new BorderLayout());
+                gamePanel.add(player2Panel);
+                displayPlayerPanel(player2Panel, player2Name, player2Game);
+
+                gameFrame.setVisible(true);
+            }
+        });
+    }
+
+    private static void displayPlayerPanel(JPanel panel, String playerName, TambolaGame game) {
+        panel.add(new JLabel(playerName), BorderLayout.NORTH);
+
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
+        panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
+
+        JButton generateCardButton = new JButton("Generate Card");
+        panel.add(generateCardButton, BorderLayout.SOUTH);
+
+        generateCardButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                game.generateCard();
+                textArea.setText(game.getCardString());
+            }
+        });
+    }
+
+    private static void displayDrawPanel(JPanel panel, TambolaGame player1Game, TambolaGame player2Game) {
+        JButton drawButton = new JButton("Draw Number");
+        panel.add(drawButton);
+
+        JTextArea drawResult = new JTextArea();
+        drawResult.setEditable(false);
+        panel.add(new JScrollPane(drawResult));
+
+        drawButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int drawnNumber = player1Game.drawNum();
+                player2Game.checkNumber(drawnNumber);
+                drawResult.setText("Number drawn: " + drawnNumber + "\n");
+
+                // Update both player's cards
+                drawResult.append("Player 1 Card: \n" + player1Game.getCardString() + "\n");
+                drawResult.append("Player 2 Card: \n" + player2Game.getCardString() + "\n");
+            }
+        });
+    }
+}
