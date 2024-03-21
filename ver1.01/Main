@@ -1,0 +1,21 @@
+public class Main {
+    public static void main(String[] args) {
+        TambolaGame game = new TambolaGame();
+        TambolaBoard board = new TambolaBoard();
+
+        // Display the initial Tambola board
+        System.out.println("Initial Tambola Board:");
+        board.displayBoard();
+        System.out.println();
+
+        // Simulate the game loop
+        int drawnNumber;
+        for (int i = 0; i < 10; i++) { // Simulating 10 draws for demonstration
+            drawnNumber = game.drawNum();
+            System.out.println("Number drawn: " + drawnNumber);
+            // Additional logic to mark off numbers on players' cards and check for wins
+            // You need to implement this part
+            System.out.println();
+        }
+    }
+}
