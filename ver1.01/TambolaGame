@@ -1,0 +1,67 @@
+public class TambolaGame {
+
+    Node head;
+
+    public int drawNum() {
+        Random rand = new Random();
+        int num = rand.nextInt(90) + 1;
+        insert(num); // Insert the drawn number into the linked list
+        return num;
+    }
+
+    // Insert method for adding drawn numbers to the linked list
+    
+
+    public void generateCard() {
+        head = null; // Reset the card
+        Random rand = new Random();
+
+        // Generate 15 unique random numbers for the card
+        for (int i = 0; i < 15; i++) {
+            int num;
+            do {
+                num = rand.nextInt(90) + 1;
+            } while (search(num)); // Ensure the number is unique
+
+            insert(num); // Insert the unique number into the card
+        }
+    }
+
+    private boolean search(int data) {
+        Node current = head;
+        while (current != null) {
+            if (current.data == data) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+
+    private void insert(int data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    public String getCardString() {
+        StringBuilder sb = new StringBuilder();
+        Node current = head;
+        while (current != null) {
+            sb.append(current.data).append("\t");
+            current = current.next;
+        }
+        return sb.toString();
+    }
+
+    public void checkNumber(int number) {
+        Node current = head;
+        while (current != null) {
+            if (current.data == number) {
+                current.data = -1; // Mark the number as checked
+                break;
+            }
+            current = current.next;
+        }
+    }
+}
