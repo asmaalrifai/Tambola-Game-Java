@@ -1,0 +1,65 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.tambolagame;
+
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+/**
+ *
+ * @author Asmz
+ */
+public class MultiLinkedList {
+
+    Node[][] grid;
+
+    public MultiLinkedList() {
+        this.grid = new Node[3][3];
+    }
+
+    public void populatePlayerGrid(JPanel jPanel_Player) {
+        Random random = new Random();
+        Set<Integer> usedNumbers = new HashSet<>();
+
+        
+        for (int col = 0; col < 3; col++) {
+            // Generate and populate 3 unique numbers in the current column
+            for (int row = 0; row < 3; row++) {
+                JTextField textField = (JTextField) jPanel_Player.getComponent(row + col * 3); // Calculate component index
+                Integer number;
+                if (textField.getText().equals("x")) {
+                    this.grid[row][col] = null; // Space is not part of linked list
+                } else {
+                    do {
+                        number = random.nextInt(9) + 1;
+                    } while (usedNumbers.contains(number));
+                    textField.setText(String.valueOf(number));
+                    usedNumbers.add(number);
+                    this.grid[row][col] = new Node(number); // Create node for non-null entries
+                }
+            }
+        }
+
+        // Establish connections between nodes
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                Node currentNode = grid[row][col];
+                if (currentNode != null) {
+                    // Connect to the right node
+                    if (col < 2 && grid[row][col + 1] != null) {
+                        currentNode.right = grid[row][col + 1];
+                    }
+                    // Connect to the down node
+                    if (row < 2 && grid[row + 1][col] != null) {
+                        currentNode.down = grid[row + 1][col];
+                    }
+                }
+            }
+        }
+    }
+}
