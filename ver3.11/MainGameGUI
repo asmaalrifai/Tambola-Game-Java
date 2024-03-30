@@ -105,7 +105,7 @@ public class MainGameGUI extends javax.swing.JFrame {
                 javax.swing.JTextField textField = (javax.swing.JTextField) jPanel_Player.getComponent(row + col * 3); // Calculate component index
 //                    make -1 as null
                 if (textField.getText().equals("-1")) {
-                    textField.setText(""); // Set empty text for -1 values
+                    textField.setText(null); // Set empty text for -1 values
                 } else {
                     int number;
                     do {
