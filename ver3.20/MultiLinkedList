@@ -1,0 +1,78 @@
+public class MultiLinkedList {
+
+    Node head;
+
+    // Method to add a new node to the right of the given node
+    void addRight(Node node, int data) {
+        Node newNode = new Node(data);
+        if (node == null) {
+            return;
+        }
+        node.right = newNode;
+    }
+
+    // Method to add a new node down to the given node
+    void addDown(Node node, int data) {
+        Node newNode = new Node(data);
+        if (node == null) {
+            return;
+        }
+        node.down = newNode;
+    }
+
+    // Method to generate the multi-linked list structure
+    void generateMultiLinkedList() {
+        head = new Node(0); // Assuming the head starts at (0,0)
+        Node current = head;
+        Node startOfRow = head;
+
+        // Connect nodes right and down
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 8; col++) { // Only need to connect 8 right for a 3x9 grid
+                addRight(current, 0); // Add nodes to the right
+                current = current.right;
+            }
+            if (row < 2) { // No need to connect down for the last row
+                addDown(startOfRow, 0); // Add nodes down
+                startOfRow = startOfRow.down;
+                current = startOfRow;
+            }
+        }
+    }
+
+    // Method to fill the grid
+    void fillGrid() {
+        Node current = head;
+        Node startOfRow = head;
+        int row = 0;
+
+        while (current != null) {
+
+            // Check if the current cell in the grid is empty ("-1")
+            if (current.data == -1) {
+                // Move right
+                if (current.right != null) {
+                    current = current.right;
+                } else {
+                    // If no more cells to the right, move to the next row
+                    startOfRow = startOfRow.down; // Move to the next row
+                    current = startOfRow; // Start at the beginning of the next row
+                    row++;
+                }
+            } else {
+                // Fill the cell with "4"
+                current.data = 4;
+                // Move right or down depending on availability
+                if (current.right != null) {
+                    current = current.right;
+                } else {
+                    // If no more cells to the right, move to the next row
+                    startOfRow = startOfRow.down; // Move to the next row
+                    current = startOfRow; // Start at the beginning of the next row
+                    row++;
+                }
+            }
+        }
+
+    }
+}
